@@ -1,17 +1,25 @@
 from flask import Flask
-import sqlite3
+from flask import Flask, flash, redirect, render_template, request, session, abort
+import os
+
 app = Flask(__name__)
 
+@app.route('/home')
+def home():
+    if not session.get('logged_in'):
+        return render_template('home.html')
+    else:
+        return "Hello Boss!"
 
-@app.route('/')
-def hello():
-    con = sqlite3.connect('../db/knowledge_base.db')
-    c = con.cursor()
-    c.execute("SELECT * FROM knowledge")
-    knowledge = c.fetchone()
-    print(c.fetchone())
-    return "knowledge "+knowledge[1]
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    if request.form['password'] == 'password' and request.form['username'] == 'admin':
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    return home()
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
+    # app.secret_key = os.urandom(12)
+    # app.run(debug=True,host='0.0.0.0', port=4000)
     app.run()

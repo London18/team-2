@@ -1,8 +1,18 @@
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort
+from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import os
 
+# app = Flask(__name__)
+
+# App config.
+DEBUG = True
 app = Flask(__name__)
+app.config.from_object(__name__)
+app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
+
+class ReusableForm(Form):
+    name = TextField('Name:', validators=[validators.required()])
 
 @app.route('/home')
 def home():

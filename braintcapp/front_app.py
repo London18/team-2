@@ -2,6 +2,8 @@ from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import os
+from flask import abort, redirect, url_for
+
 
 # app = Flask(__name__)
 
@@ -13,6 +15,7 @@ app.config['SECRET_KEY'] = '7d441f27d441f27567d441f2b6176a'
 
 class ReusableForm(Form):
     name = TextField('What you want to search:', validators=[validators.required()])
+
 
 @app.route('/home')
 def home():
@@ -45,7 +48,15 @@ def hello():
         else:
             flash('All the form fields are required. ')
 
+        if form.validate():
+            if name == "Sympton":
+                return render_template('home.html')
+
+
     return render_template('hello.html', form=form)
+
+
+
 
 if __name__ == "__main__":
     # app.secret_key = os.urandom(12)

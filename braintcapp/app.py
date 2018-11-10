@@ -1,6 +1,6 @@
 
-
-from flask import Flask, request, redirect, url_for
+from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
+from flask import Flask, request, redirect, url_for, render_template, session, abort,flash
 import sqlite3
 import numpy as np
 app = Flask(__name__)
@@ -12,7 +12,49 @@ c = con.cursor()
 c.execute("SELECT * FROM category")
 knowledge = c.fetchall()
 
-@app.route("/")
+class ReusableForm(Form):
+    name = TextField('What you want to search:', validators=[validators.required()])
+
+
+@app.route('/home')
+def home():
+    if not session.get('logged_in'):
+        return render_template('home.html')
+    else:
+        return "Hello Boss!"
+
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    if request.form['password'] == 'password' and request.form['username'] == 'admin':
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    return home()
+
+@app.route("/", methods=['GET', 'POST'])
+def hello():
+    form = ReusableForm(request.form)
+
+
+    print (form.errors)
+    if request.method == 'POST':
+        name=request.form['name']
+        print (name)
+
+        if form.validate():
+            # Save the comment here.
+            flash('Hello ' + name)
+        else:
+            flash('All the form fields are required. ')
+
+        if name == "sympton":
+            return render_template('home.html')
+
+
+    return render_template('hello.html', form=form)
+
+
+@app.route("/category")
 def index():
     render_string = '<ul>'
 
@@ -62,14 +104,13 @@ def select2():
 
     for i in k3:
         k2 = np.array(i)
-        print (i)
+        print(i)
 
         render_string += '<li>'+ k2[2] + '</li>'
 
-    render_string += '</ul>'
+    render_string += '</ul><div>DO YOU THINK IT IS USEFUL?</div>'
 
     return render_string
-
 
 
 

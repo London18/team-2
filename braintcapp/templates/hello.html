@@ -1,9 +1,96 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
+    <style type="text/css">
+        * {
+box-sizing: border-box;
+}
+
+*:focus {
+	outline: none;
+}
+body {
+font-family: Arial;
+background-color: #FFF;
+<!--#ECF0F1-->
+padding: 50px;
+}
+.login {
+margin: 20px auto;
+width: 300px;
+}
+.login-screen {
+background-color: #FFF;
+padding: 20px;
+border-radius: 5px
+}
+
+.app-title {
+text-align: center;
+color: #777;
+}
+
+.login-form {
+text-align: center;
+}
+.control-group {
+margin-bottom: 10px;
+}
+
+input {
+text-align: center;
+background-color: #ECF0F1;
+<!--#3498DB-->
+border: 2px solid transparent;
+border-radius: 3px;
+font-size: 16px;
+font-weight: 200;
+padding: 10px 0;
+width: 300px;
+transition: border .5s;
+}
+
+input:focus {
+border: 2px solid #3498DB;
+box-shadow: none;
+}
+
+.btn {
+  border: 2px solid transparent;
+  background: #3498DB;
+  color: #ffffff;
+  font-size: 23px;
+  line-height: 25px;
+  padding: 10px 0;
+  text-decoration: none;
+  text-shadow: none;
+  border-radius: 3px;
+  box-shadow: none;
+  transition: 0.25s;
+  display: block;
+  width: 250px;
+  margin: 0 auto;
+}
+
+.btn:hover {
+  background-color: #2980B9;
+}
+
+.login-link {
+  font-size: 12px;
+  color: #444;
+  display: block;
+	margin-top: 12px;
+}
+ul,li{
+ list-style:none;
+ }
+
+    </style>
     <title>Reusable Form Demo</title>
 </head>
 <body>
+<div>
 {% block body %}
 <div class="block1">
     <h1>Hello {{name}}!</h1>
@@ -19,23 +106,24 @@
 {% if messages %}
 <ul>
     {% for message in messages %}
-    <li>{{ message[1] }}</li>
+
     {% endfor %}
 </ul>
 {% endif %}
 {% endwith %}
 <form action="" method="post">
     {{ form.csrf }}
-
+<br/>
     <div class="input text">
-        {{ form.name.label }} {{ form.name }}
+        {{ form.name }}
     </div>
-
+<br/>
     <div class="input submit">
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Search" />
     </div>
+    <br/>
 </form>
-<a href="/home">hello world</a>
+    <br/>
 <form action="/category" method="get">
     <div class="input submit">
         <input type="submit" value="Category" />
@@ -46,14 +134,15 @@
 </p>
 <a href="https://www.thebraintumourcharity.org/frequently-asked-questions/">FAQ
 </a>
+
 <a href="https://www.thebraintumourcharity.org/understanding-brain-tumours/
 ">Understanding Brain Tumours
 </a>
+
 <a href="https://www.thebraintumourcharity.org/prognosis-for-brain-tumours/
 ">Prognosis For brain tumours
 </a>
-
-
 </form>
+</div>
 </body>
 </html>

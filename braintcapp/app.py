@@ -23,13 +23,10 @@ def home():
     else:
         return "Hello Boss!"
 
-@app.route('/login', methods=['POST'])
-def do_admin_login():
-    if request.form['password'] == 'password' and request.form['username'] == 'admin':
-        session['logged_in'] = True
-    else:
-        flash('wrong password!')
-    return home()
+@app.route('/Adddata', methods=['GET','POST'])
+def Add_data():
+
+    return render_template('Adddata.html')
 
 @app.route("/", methods=['GET', 'POST'])
 def hello():

@@ -48,9 +48,8 @@ def hello():
         else:
             flash('All the form fields are required. ')
 
-        if form.validate():
-            if name == "Sympton":
-                return render_template('home.html')
+        if name == "sympton":
+            return render_template('home.html')
 
 
     return render_template('hello.html', form=form)

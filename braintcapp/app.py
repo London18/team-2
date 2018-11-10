@@ -53,15 +53,17 @@ def hello():
 
 @app.route("/category")
 def index():
-    render_string = '<ul>'
+    render_string = '<ul style="font-size:28px;list-style:none;">'
 
     for book in knowledge:
         k2 = np.array(book)
-        render_string += '<li><a href="/select?cato='+k2[0]+'">' + str(k2[1]) + '</a></li>'
+        render_string += '<li><h2><a style="text-decoration:none" href="/select?cato='+k2[0]+'">' + str(k2[1]) + '</a></h2></li>'
 
     render_string += '</ul>'
 
     return render_string
+    # # eval(render_string)
+    # return render_template('cata.html', render=render_string)
 
 @app.route("/select",methods=['GET'])
 def select():
@@ -70,16 +72,16 @@ def select():
     con = sqlite3.connect('../db/knowledge_base.db')
     c = con.cursor()
 
-    sql = "SELECT * FROM knowledge where category_id="+getcato
+    sql = "SELECT * FROM knowledge where category_id="+getcato+" order by count desc"
     print(sql)
     c.execute(sql)
     k3 = c.fetchall()
-    render_string = '<ul>'
+    render_string = '<ul style="font-size:28px; list-style:none; ">'
 
     for i in k3:
         k2 = np.array(i)
 
-        render_string += '<li><a href="/select2?kn='+k2[1]+'">' + k2[1] + '</a></li>'
+        render_string += '<li><h2><a style="text-decoration:none;" href="/select2?kn='+k2[1]+'">' + k2[1] + '</a></h2></li>'
 
     render_string += '</ul>'
 
@@ -92,40 +94,41 @@ def select2():
     con = sqlite3.connect('../db/knowledge_base.db')
     c = con.cursor()
 
-    sql = "SELECT * FROM knowledge where knowledge_name='"+getkn+"'"
+    sql = "SELECT * FROM knowledge where knowledge_name='"+getkn+"' order by count desc"
     print(sql)
     c.execute(sql)
     k3 = c.fetchall()
     print(222)
-    render_string = '<ul>'
+    render_string = '<ul style="list-style:none;">'
 
     for i in k3:
         k2 = np.array(i)
         print(i)
 
-        render_string += '<li>'+ k2[2] + '</li>'
+        render_string += '<li><h1>'+ k2[2] + '<h1></li>'
 
-    render_string += '</ul><div>DO YOU THINK IT IS USEFUL?</div>'
+    render_string += '</ul><div ><h2>DO YOU THINK IT IS USEFUL?' \
+                     '</div><input type="radio" name="comment" value="yes" checked="true" />YES' \
+                     '<input type="radio" name="comment" value="no"/>NO' \
+                     '<a href="/select3?value='+k2[0]+'">'\
+                     '<input type="submit" value="Submit"/></h2>'
 
     return render_string
 
 
+@app.route("/select3",methods=['GET'])
+def select3():
+    getvalue= request.args.get('value');
+    print(getvalue)
+    con = sqlite3.connect('../db/knowledge_base.db')
+    c = con.cursor()
 
-@app.route("/book", methods=['POST', 'GET'])
-def book():
-    _form = request.form
+    sql = "update knowledge set count=count+1 where knowledge="+getvalue
+    print(sql)
+    c.execute(sql)
 
-    if request.method == 'POST':
-        title = _form["title"]
-        books.append(title)
-        return redirect(url_for('index'))
+    return render_template('home.html')
 
-    return '''
-        <form name="book" action="/book" method="post">
-            <input id="title" name="title" type="text" placeholder="add book">
-            <button type="submit">Submit</button>
-        </form>
-        '''
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=5200, debug=True)

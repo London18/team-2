@@ -33,6 +33,7 @@ def do_admin_login():
 def hello():
     form = ReusableForm(request.form)
 
+
     print (form.errors)
     if request.method == 'POST':
         name=request.form['name']

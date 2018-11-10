@@ -29,6 +29,23 @@ def do_admin_login():
         flash('wrong password!')
     return home()
 
+@app.route("/", methods=['GET', 'POST'])
+def hello():
+    form = ReusableForm(request.form)
+
+    print (form.errors)
+    if request.method == 'POST':
+        name=request.form['name']
+        print (name)
+
+        if form.validate():
+            # Save the comment here.
+            flash('Hello ' + name)
+        else:
+            flash('All the form fields are required. ')
+
+    return render_template('hello.html', form=form)
+
 if __name__ == "__main__":
     # app.secret_key = os.urandom(12)
     # app.run(debug=True,host='0.0.0.0', port=4000)
